@@ -49,7 +49,8 @@ class Vec3:
         return self.__mul__(1/t)
 
     def length(self):
-        return math.sqrt(self.length_sqrd)
+        length_sqrd = self.length_sqrd()
+        return math.sqrt(length_sqrd)
 
     def length_sqrd(self):
         return self.e[0] * self.e[0] + self.e[1] * self.e[1] + self.e[2] * self.e[2]
@@ -104,6 +105,12 @@ class Vec3:
                     u.e[2]*v.e[0] - u.e[0] * v.e[2],
                     u.e[0] * v.e[1] - u.e[1] * v.e[0])
 
+    @staticmethod
+    def unit_vector(v):
+        if isinstance(v, Vec3):
+            return v / v.length()
+        else:
+            raise TypeError("Static method unit_vector accepts only instances of Vec3")
 
 point3 = Vec3
 
@@ -132,3 +139,6 @@ if __name__ == "__main__":
     print(f"{v3/2}")
     print(f"value: {value}")
     print(f"{Vec3.dot(v2, v3)}")
+
+    v4 = Vec3(float(-value), 0.0, 0.0)
+    print(f'{v4}')
