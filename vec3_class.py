@@ -63,34 +63,23 @@ class Vec3:
 
     def __add__(self, v):
         if isinstance(v, Vec3):
-            self.e[0] = self.e[0] + v[0]
-            self.e[1] = self.e[1] + v[1]
-            self.e[2] = self.e[2] + v[2]
-            return self
+            return Vec3(self.e[0] + v.e[0], self.e[1] + v.e[1], self.e[2] + v.e[2])
         else:
             raise TypeError("Vec3 object needs to be added up with another Vec3 object.")
 
     def __sub__(self, v):
         if isinstance(v, Vec3):
-            self.e[0] = self.e[0] - v[0]
-            self.e[1] = self.e[1] - v[1]
-            self.e[2] = self.e[2] - v[2]
-            return self
+            return Vec3(self.e[0] - v.e[0], self.e[1] - v.e[1], self.e[2] - v.e[2])
         else:
             raise TypeError("Vec3 object needs to be substracted with another Vec3 object.")
 
-    def __mul__(self, other):
-        if isinstance(other, (int, float)):
-            self.e[0] = self.e[0] * other
-            self.e[1] = self.e[1] * other
-            self.e[2] = self.e[2] * other
-        elif isinstance(other, Vec3):
-            self.e[0] = self.e[0] * other.e[0]
-            self.e[1] = self.e[1] * other.e[1]
-            self.e[2] = self.e[2] * other.e[2]
+    def __mul__(self, t):
+        if isinstance(t, (int, float)):
+            return Vec3(t * self.e[0], t * self.e[1], t * self.e[2])
+        elif isinstance(t, Vec3):
+            return Vec3(t.e[0] * self.e[0], t.e[1] * self.e[1], t.e[2] * self.e[2])
         else:
             raise TypeError("You can multiply a Vec3 object with either another Vec3 object or with int/float")
-        return self
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -111,6 +100,7 @@ class Vec3:
             return v / v.length()
         else:
             raise TypeError("Static method unit_vector accepts only instances of Vec3")
+
 
 point3 = Vec3
 

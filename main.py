@@ -35,7 +35,7 @@ def write_ppm_image(image_height, image_width):
             for j in range(0, image_width):
                 pixel_center = pixel100_loc + (i*pixel_delta_u) + (j*pixel_delta_v)
                 ray_direction = pixel_center - camera_center
-                r = ray(camera_center, ray_direction)
+                r = ray(ray_direction, camera_center)
                 pixel_color = ray_color(r)
                 print(f'Scan lines remaining: {image_height - j}')
                 f.write(str(write_color(pixel_color)))
