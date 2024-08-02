@@ -129,6 +129,5 @@ if __name__ == "__main__":
     print(f"{v3/2}")
     print(f"value: {value}")
     print(f"{Vec3.dot(v2, v3)}")
-
     v4 = Vec3(float(-value), 0.0, 0.0)
     print(f'{v4}')

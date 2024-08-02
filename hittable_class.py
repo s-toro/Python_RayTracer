@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from HitRecord_class import HitRecord
 
-
 class hitable(ABC):
     def __init__(self):
         super().__init__()
