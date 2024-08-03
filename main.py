@@ -58,8 +58,8 @@ def write_ppm_image(image_width):
                 pixel_color = ray_color(r)
                 f.write(str(write_color(pixel_color)))
                 f.write('\n')
-    f.close()
     print('Finished writing ppm file.')
+
 
 if __name__ == "__main__":
     write_ppm_image(400)
