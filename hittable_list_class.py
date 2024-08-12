@@ -17,7 +17,7 @@ class HittableList(Hittable):
         self.objects.clear()
 
     def hit(self, ray: ray, ray_tmin: float, ray_tmax: float, rec: HitRecord) -> bool:
-        temp_rec = HitRecord()  # Initialize with appropriate default values
+        temp_rec = HitRecord(Vec3(), Vec3())  # Initialize with appropriate default values
         hit_anything = False
         closest_so_far = ray_tmax
 
@@ -25,6 +25,9 @@ class HittableList(Hittable):
             if obj.hit(ray, ray_tmin, closest_so_far, temp_rec):
                 hit_anything = True
                 closest_so_far = temp_rec.t
-                rec.t = temp_rec.t  # Copy all necessary fields
+                rec.normal = temp_rec.normal
+                rec.p = temp_rec.p
+                rec.front_face = temp_rec.front_face
+                rec.p = temp_rec.p
 
         return hit_anything

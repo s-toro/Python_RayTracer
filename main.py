@@ -10,24 +10,13 @@ from sphere import Sphere
 from utility_functions_and_consts import *
 
 
-#def hit_sphere(center: Vec4, radius: float, r: ray) -> float:
-#    oc = center - r.origin()
-#    a = r.direction().length_sqrd()
-#    h = Vec3.dot(r.direction(), oc)
-#    c = oc.length_sqrd() - radius*radius
-#    discriminant = h*h - a*c
-#    if discriminant < 0:
-#        return -1.0
-#    else:
-#        return (h - math.sqrt(discriminant)) / a
-
-
 def ray_color(r: ray, world: Hittable) -> Vec3:
-    rec = HitRecord()
-    if world.hit(r, 0, infinity, rec):
+    rec = HitRecord(p=Vec3(0, 0, 0), normal=Vec3(0, 0, 0))
+    if world.hit(r, 0.01 , infinity, rec):
         return 0.5 * (rec.normal + color(1, 1, 1))
     unit_direction = Vec3.unit_vector(r.direction())
     a = 0.5*(unit_direction.y() + 1.0)
+    print('2')
     return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0)
 
 
@@ -60,7 +49,7 @@ def write_ppm_image(image_width):
             print(f'Scan lines remaining: {image_height - i}')
             for j in range(image_width):
                 pixel_center = pixel100_loc + (j*pixel_delta_u) + (i*pixel_delta_v)
-                ray_direction = pixel_center - camera_center
+                ray_direction = Vec3.unit_vector(pixel_center - camera_center)
                 r = ray(camera_center, ray_direction)
                 pixel_color = ray_color(r, world)
                 f.write(str(write_color(pixel_color)))

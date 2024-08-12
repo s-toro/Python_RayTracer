@@ -22,15 +22,14 @@ class Sphere(Hittable):
 
         sqrtd = sqrt(discriminant)
         root = (h - sqrtd) / a
-        if root <= ray_tmin or ray_tmax <= ray_tmin:
+        if root < ray_tmin or root > ray_tmax:
             root = (h + sqrtd) / a
-            if root <= ray_tmin or ray_tmax <= root:
+            if root < ray_tmin or ray_tmax < root:
                 return False
 
         rec.t = root
         rec.p = r.at(rec.t)
         outward_normal = (rec.p - self.center) / self.radius
         rec.set_face_normal(r, outward_normal)
-
         return True
 
