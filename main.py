@@ -3,25 +3,29 @@ import math
 from color import color, write_color
 from ray import ray
 from vec3_class import Vec3
+from hittable_list_class import HittableList
+from hittable_class import Hittable
+from HitRecord_class import HitRecord
+from sphere import Sphere
+from utility_functions_and_consts import *
 
 
-def hit_sphere(center: Vec3, radius: float, r: ray) -> float:
-    oc = center - r.origin()
-    a =  r.direction().length_sqrd()
-    h = Vec3.dot(r.direction(), oc)
-    c = oc.length_sqrd() - radius*radius
-    discriminant = h*h - a*c
-    if discriminant < 0:
-        return -1.0
-    else:
-        return (h - math.sqrt(discriminant)) / a
+#def hit_sphere(center: Vec4, radius: float, r: ray) -> float:
+#    oc = center - r.origin()
+#    a = r.direction().length_sqrd()
+#    h = Vec3.dot(r.direction(), oc)
+#    c = oc.length_sqrd() - radius*radius
+#    discriminant = h*h - a*c
+#    if discriminant < 0:
+#        return -1.0
+#    else:
+#        return (h - math.sqrt(discriminant)) / a
 
 
-def ray_color(r: ray) -> Vec3:
-    t = hit_sphere(Vec3(0, 0, -1), 0.5, r)
-    if t > 0.0:
-        N = Vec3.unit_vector(r.at(t) - Vec3(0, 0, -1))
-        return 0.5*color(N.x()+1, N.y()+1, N.z()+1)
+def ray_color(r: ray, world: Hittable) -> Vec3:
+    rec = HitRecord()
+    if world.hit(r, 0, infinity, rec):
+        return 0.5 * (rec.normal + color(1, 1, 1))
     unit_direction = Vec3.unit_vector(r.direction())
     a = 0.5*(unit_direction.y() + 1.0)
     return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0)
@@ -34,6 +38,9 @@ def write_ppm_image(image_width):
     if image_height < 1:
         image_height = 1
 
+    world = HittableList()
+    world.add(Sphere(Vec3(0, 0, -1), 0.5))
+    world.add(Sphere(Vec3(0, -100.5, -1), 100))
     focal_length = 1.0
     viewport_height = 2.0
     viewport_width = viewport_height * (image_width/image_height)
@@ -54,8 +61,8 @@ def write_ppm_image(image_width):
             for j in range(image_width):
                 pixel_center = pixel100_loc + (j*pixel_delta_u) + (i*pixel_delta_v)
                 ray_direction = pixel_center - camera_center
-                r = ray(ray_direction, camera_center)
-                pixel_color = ray_color(r)
+                r = ray(camera_center, ray_direction)
+                pixel_color = ray_color(r, world)
                 f.write(str(write_color(pixel_color)))
                 f.write('\n')
     print('Finished writing ppm file.')
